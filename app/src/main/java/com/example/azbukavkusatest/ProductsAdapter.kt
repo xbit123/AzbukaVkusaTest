@@ -32,11 +32,12 @@ class ProductsAdapter(val products: List<ProductEntity>): RecyclerView.Adapter<P
             itemView.tv_vh_product_manufacturer.text = product.manufacturer
             itemView.tv_vh_product_model.text = product.model
             itemView.tv_vh_product_price.text = product.priceFormatted
-            Glide.
-                with(itemView.context).
-                load(product.image).
-                centerCrop().
-                into(itemView.iv_vh_product_icon)
+            Glide
+                .with(itemView.context)
+                .load(product.image)
+                .centerCrop()
+                .placeholder(R.drawable.no_image)
+                .into(itemView.iv_vh_product_icon)
 
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, ProductActivity::class.java)
