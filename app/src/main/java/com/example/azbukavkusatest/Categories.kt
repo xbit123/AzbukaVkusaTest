@@ -1,6 +1,7 @@
 package com.example.azbukavkusatest
 
 import com.example.azbukavkusatest.entity.CategoryEntity
+import com.example.azbukavkusatest.utils.Constants
 
 object Categories {
     private lateinit var categories: Map<Int, ArrayList<CategoryEntity>>

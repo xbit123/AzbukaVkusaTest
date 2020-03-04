@@ -17,15 +17,24 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="TextCategoryTitle">
-        <item name="android:textSize">22sp</item>
-        <item name="android:textStyle">bold</item>
+    <style name="MyText">
         <item name="android:textColor">@color/colorTextDark</item>
     </style>
 
-    <style name="TextProductPrice">
+    <style name="MyTitle" parent="MyText">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
+    <style name="MyTitle1" parent="MyTitle">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="MyTitle2" parent="MyTitle">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="MySubtitle" parent="MyText">
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="CollapsingToolbarLayoutExpandedTextStyle" parent="AppTheme">

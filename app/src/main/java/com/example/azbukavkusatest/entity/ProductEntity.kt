@@ -1,11 +1,9 @@
 package com.example.azbukavkusatest.entity
 
-import android.util.Log
-import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.example.azbukavkusatest.Constants
+import com.example.azbukavkusatest.utils.Constants
 import com.example.azbukavkusatest.R
 import com.example.azbukavkusatest.utils.HtmlDecoder
 import com.google.gson.annotations.SerializedName
@@ -30,19 +28,23 @@ data class ProductEntity(
     var rating: Int,
     @SerializedName("product_description")
     var productDescriptions: ArrayList<ProductDescriptionEntity>,
-    @SerializedName("attributes")
-    var attributes: ArrayList<AttributesEntity>
+    @SerializedName("product_attributes")
+    var attributes: HashMap<String, HashMap<Int, HashMap<Int, AttributesEntity>>>
 ) {
-    val fullName get() = "$manufacturer $model"
+    val fullName
+        get() = "$manufacturer $model"
     val formattedDescription: String
         get() = productDescriptions
             .find { it.languageId == Constants.LANGUAGE_ID }?.description
             .let { HtmlDecoder.decode(it) }
             .replace("[\n]+".toRegex(), "\n")
-
+            .replace("\t".toRegex(), "")
+    fun attributesInLanguage(): List<AttributesEntity>? {
+        return attributes["attributes"]?.flatMap { it.value.values }?.filter { it.languageId == Constants.LANGUAGE_ID }
+    }
 }
 
 @BindingAdapter("productImage")
 fun loadImage(view: AppCompatImageView, url: String?) {
-    Glide.with(view.context).load(url).placeholder(R.drawable.no_image).into(view)
+    Glide.with(view.context).load(url).error(R.drawable.no_image).into(view)
 }

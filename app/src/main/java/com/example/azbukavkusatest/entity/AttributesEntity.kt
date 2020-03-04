@@ -8,5 +8,7 @@ data class AttributesEntity (
     @SerializedName("name")
     var name: String,
     @SerializedName("text")
-    var text: String
+    var text: String,
+    @SerializedName("language_id")
+    var languageId: Int
 )

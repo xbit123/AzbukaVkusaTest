@@ -1,18 +1,20 @@
-package com.example.azbukavkusatest
+package com.example.azbukavkusatest.ui.adapter
 
-import android.os.Build
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.azbukavkusatest.DiffUtilCallBack
+import com.example.azbukavkusatest.R
 import com.example.azbukavkusatest.entity.CategoryEntity
 import com.example.azbukavkusatest.utils.HtmlDecoder
 import kotlinx.android.synthetic.main.view_holder_category.view.*
 
-class CategoriesAdapter: PagedListAdapter<CategoryEntity, CategoriesAdapter.CategoryViewHolder>(DiffUtilCallBack()) {
+class CategoriesAdapter: PagedListAdapter<CategoryEntity, CategoriesAdapter.CategoryViewHolder>(
+    DiffUtilCallBack()
+) {
     //Reuse recycled views of inner RV
     val innerRVViewPool = RecyclerView.RecycledViewPool()
 
@@ -33,7 +35,9 @@ class CategoriesAdapter: PagedListAdapter<CategoryEntity, CategoriesAdapter.Cate
             val gridLayoutManager = GridLayoutManager(itemView.context, 1, GridLayoutManager.HORIZONTAL, false)
             itemView.rv_products.setHasFixedSize(true)
             itemView.rv_products.layoutManager = gridLayoutManager
-            adapter = ProductsAdapter(categoryEntity.products)
+            adapter = ProductsAdapter(
+                categoryEntity.products
+            )
             itemView.rv_products.adapter = adapter
             itemView.rv_products.setRecycledViewPool(innerRVViewPool)
         }

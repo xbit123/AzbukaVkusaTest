@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AzbukaVkusaTest</string>
     <string name="title_item_detail">Item Detail</string>
+    <string name="specifications_title">Specifications</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.azbukavkusatest
+package com.example.azbukavkusatest.utils
 
 class Constants {
     companion object {
