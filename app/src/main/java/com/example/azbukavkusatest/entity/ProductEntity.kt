@@ -1,5 +1,6 @@
 package com.example.azbukavkusatest.entity
 
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
@@ -32,12 +33,13 @@ data class ProductEntity(
     @SerializedName("attributes")
     var attributes: ArrayList<AttributesEntity>
 ) {
-    fun getFormattedDescription(): String? {
-        val desc =
-            productDescriptions.find { it.languageId == Constants.LANGUAGE_ID }?.description
-        return if (desc == null) null
-        else HtmlDecoder.decode(desc)
-    }
+    val fullName get() = "$manufacturer $model"
+    val formattedDescription: String
+        get() = productDescriptions
+            .find { it.languageId == Constants.LANGUAGE_ID }?.description
+            .let { HtmlDecoder.decode(it) }
+            .replace("[\n]+".toRegex(), "\n")
+
 }
 
 @BindingAdapter("productImage")

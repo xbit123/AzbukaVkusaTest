@@ -8,9 +8,6 @@
         <variable
             name="product"
             type="com.example.azbukavkusatest.entity.ProductEntity" />
-        <variable
-            name="description"
-            type="String" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -25,7 +22,9 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_product"
@@ -35,10 +34,11 @@
                     app:productImage="@{product.image}"
                     android:scaleType="centerCrop"/>
 
-                <!--<androidx.appcompat.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin" />-->
+                    app:layout_collapseMode="pin"
+                    app:title="@{product.fullName}"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -87,7 +87,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:text="@{String.valueOf(product.price)}"
+                    android:text="@{String.valueOf(product.priceFormatted)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +101,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="@{description}"
+                    android:text="@{product.formattedDescription}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

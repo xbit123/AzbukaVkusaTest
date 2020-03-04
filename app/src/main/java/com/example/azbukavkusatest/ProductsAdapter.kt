@@ -13,10 +13,7 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.view_holder_product.view.*
 
 class ProductsAdapter(val products: List<ProductEntity>): RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ProductViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_product, parent, false)
         return ProductViewHolder(view)
     }
@@ -29,22 +26,24 @@ class ProductsAdapter(val products: List<ProductEntity>): RecyclerView.Adapter<P
 
     class ProductViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bindProduct(product: ProductEntity) {
-            itemView.tv_vh_product_manufacturer.text = product.manufacturer
-            itemView.tv_vh_product_model.text = product.model
-            itemView.tv_vh_product_price.text = product.priceFormatted
-            Glide
-                .with(itemView.context)
-                .load(product.image)
-                .centerCrop()
-                .placeholder(R.drawable.no_image)
-                .into(itemView.iv_vh_product_icon)
+            itemView.apply {
+                tv_vh_product_manufacturer.text = product.manufacturer
+                tv_vh_product_model.text = product.model
+                tv_vh_product_price.text = product.priceFormatted
+                Glide
+                    .with(context)
+                    .load(product.image)
+                    .centerCrop()
+                    .placeholder(R.drawable.no_image)
+                    .into(iv_vh_product_icon)
 
-            itemView.setOnClickListener {
-                val intent = Intent(itemView.context, ProductActivity::class.java)
-                val productJson = Gson().toJson(product)
-                intent.putExtra(PRODUCT_JSON_TAG, productJson)
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                itemView.context.startActivity(intent)
+                setOnClickListener {
+                    val intent = Intent(itemView.context, ProductActivity::class.java)
+                    val productJson = Gson().toJson(product)
+                    intent.putExtra(PRODUCT_JSON_TAG, productJson)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    itemView.context.startActivity(intent)
+                }
             }
         }
     }

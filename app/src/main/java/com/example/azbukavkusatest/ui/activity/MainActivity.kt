@@ -14,27 +14,29 @@ import com.example.azbukavkusatest.ui.viewmodel.MainViewModel
 import com.example.azbukavkusatest.R
 import com.example.azbukavkusatest.entity.ProductEntity
 
-class MainActivity : AppCompatActivity(), MainViewModel.Initrvinterface {
-    lateinit var adapter: CategoriesAdapter
-    private val viewModel : MainViewModel by viewModels()
+class MainActivity : AppCompatActivity() {
+    lateinit var categoriesAdapter: CategoriesAdapter
+    private val viewModel: MainViewModel by viewModels()
     lateinit var rvMain: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (!Categories.isInitialized()) viewModel.requestCategories(this)
+        if (!Categories.isInitialized()) viewModel.requestCategories()
+        viewModel.getCategoriesLoadedLiveData().observe(this, Observer {
+            if (it) initRV()
+        })
     }
 
-    override fun initRV() {
-        runOnUiThread {
-            rvMain = findViewById(R.id.rv_main)
-            val linearLayoutManager = LinearLayoutManager(this)
-            rvMain.layoutManager = linearLayoutManager
-            rvMain.setHasFixedSize(true)
-            adapter = CategoriesAdapter()
-            rvMain.adapter = adapter
-            viewModel.getCategories().observe(this, Observer { adapter.submitList(it) })
+    private fun initRV() {
+        val linearLayoutManager = LinearLayoutManager(this)
+        categoriesAdapter = CategoriesAdapter()
+        rvMain = findViewById<RecyclerView>(R.id.rv_main).apply {
+            layoutManager = linearLayoutManager
+            setHasFixedSize(true)
+            this.adapter = categoriesAdapter
         }
+        viewModel.getCategories().observe(this, Observer { categoriesAdapter.submitList(it) })
     }
 }

@@ -3,9 +3,11 @@ package com.example.azbukavkusatest.api
 import com.example.azbukavkusatest.entity.ApiResponse
 import com.example.azbukavkusatest.entity.CategoryEntity
 import com.example.azbukavkusatest.entity.ProductEntity
+import io.reactivex.Single
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -22,7 +24,7 @@ interface ShopService {
     @GET("products/category/{category_id}")
     fun getProductsByCategory(
         @Path("category_id") categoryId: Int
-    ) : Call<ApiResponse<List<ProductEntity>>>
+    ) : Single<ApiResponse<List<ProductEntity>>>
 
     companion object {
         private val okHttpClient = OkHttpClient.Builder().addInterceptor {
@@ -33,6 +35,7 @@ interface ShopService {
         val shopService: ShopService = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ShopService::class.java)

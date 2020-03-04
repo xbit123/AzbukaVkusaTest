@@ -23,6 +23,5 @@ class ProductActivity : AppCompatActivity() {
         product = Gson().fromJson(productJson, ProductEntity::class.java)
 
         binding.product = product
-        binding.description = product.getFormattedDescription()
     }
 }
