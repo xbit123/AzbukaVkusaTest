@@ -2,6 +2,7 @@ package com.example.azbukavkusatest.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -42,9 +43,15 @@ class ProductActivity : AppCompatActivity() {
         //setup attributes RV
         binding.rvAttributes.apply {
             product.attributesInLanguage()?.let {
-                adapter = AttributesAdapter(it)
+                if (it.isNotEmpty()) {
+                    tv_specifications.visibility = View.VISIBLE
+                    rv_attributes.visibility = View.VISIBLE
+
+                    adapter = AttributesAdapter(it)
+                }
             }
             setHasFixedSize(true)
+            isNestedScrollingEnabled = false
         }
 
         //setup product image

@@ -4,16 +4,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.azbukavkusatest.DiffUtilCallBack
 import com.example.azbukavkusatest.R
 import com.example.azbukavkusatest.entity.CategoryEntity
 import com.example.azbukavkusatest.utils.HtmlDecoder
 import kotlinx.android.synthetic.main.view_holder_category.view.*
 
 class CategoriesAdapter: PagedListAdapter<CategoryEntity, CategoriesAdapter.CategoryViewHolder>(
-    DiffUtilCallBack()
+    object : DiffUtil.ItemCallback<CategoryEntity>() {
+        override fun areItemsTheSame(oldItem: CategoryEntity, newItem: CategoryEntity): Boolean {
+            return oldItem.categoryId == newItem.categoryId
+        }
+
+        override fun areContentsTheSame(oldItem: CategoryEntity, newItem: CategoryEntity): Boolean {
+            return oldItem == newItem
+        }
+    }
 ) {
     //Reuse recycled views of inner RV
     val innerRVViewPool = RecyclerView.RecycledViewPool()

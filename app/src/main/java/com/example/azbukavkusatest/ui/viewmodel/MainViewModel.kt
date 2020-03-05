@@ -2,73 +2,70 @@ package com.example.azbukavkusatest.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.example.azbukavkusatest.Categories
-import com.example.azbukavkusatest.CategoriesDataSource
+import com.example.azbukavkusatest.data.Data
+import com.example.azbukavkusatest.data.CategoriesDataSource
 import com.example.azbukavkusatest.api.ShopService.Companion.shopService
 import com.example.azbukavkusatest.api.State
 import com.example.azbukavkusatest.entity.ApiResponse
 import com.example.azbukavkusatest.entity.CategoryEntity
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel : ViewModel() {
-    private val categoriesLiveData: LiveData<PagedList<CategoryEntity>>
-    private val categoriesLoadedLiveData = MutableLiveData<Boolean>()
+    private val categoriesLd: LiveData<PagedList<CategoryEntity>>
+    val categoriesLoadedLd = MutableLiveData<Boolean>()
+    val stateLd = MutableLiveData<State>()
     private val compositeDisposable = CompositeDisposable()
 
     init {
         val config = PagedList.Config.Builder()
-            .setPageSize(1)
+            .setPageSize(4)
             .setEnablePlaceholders(false)
             .build()
-        categoriesLiveData = initializedPagedListBuilder(config, compositeDisposable).build()
+        categoriesLd = initializedPagedListBuilder(config, compositeDisposable).build()
+
+        retry()
+    }
+
+    fun retry() {
+        if (!Data.initialized) requestCategories()
+        else {
+            stateLd.postValue(State.DONE)
+            categoriesLoadedLd.postValue(true)
+        }
     }
 
     fun requestCategories() {
-        shopService.getCategories().enqueue(object :
-            Callback<ApiResponse<Map<Int, ArrayList<CategoryEntity>>>> {
-            override fun onFailure(
-                call: Call<ApiResponse<Map<Int, ArrayList<CategoryEntity>>>>,
-                t: Throwable
-            ) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onResponse(
-                call: Call<ApiResponse<Map<Int, ArrayList<CategoryEntity>>>>,
-                response: Response<ApiResponse<Map<Int, ArrayList<CategoryEntity>>>>
-            ) {
-                if (response.isSuccessful
-                    && response.body() != null
-                    && response.body()?.success == 1
-                    && response.body()?.error?.size == 0
-                    && response.body()?.data != null) {
-                    Categories.setNewCategories(
-                        response.body()?.data!!
-                    )
-                    categoriesLoadedLiveData.postValue(true)
+        stateLd.postValue(State.LOADING)
+        compositeDisposable.add(
+            shopService.getCategories().subscribeOn(Schedulers.io()).subscribe(
+            {
+                if (it.success == 1 && it.error.size == 0) {
+                    Data.setCategories(it.data)
+                    categoriesLoadedLd.postValue(true)
+                    stateLd.postValue(State.DONE)
                 }
-            }
-        })
+            },
+            {
+                stateLd.postValue(State.ERROR)
+            }))
     }
 
-    fun getCategoriesLoadedLiveData() = categoriesLoadedLiveData
-
-    fun getCategories() : LiveData<PagedList<CategoryEntity>> = categoriesLiveData
+    fun getCategories() : LiveData<PagedList<CategoryEntity>> = categoriesLd
 
     private fun initializedPagedListBuilder(config: PagedList.Config, compositeDisposable: CompositeDisposable):
             LivePagedListBuilder<Int, CategoryEntity> {
 
         val dataSourceFactory = object : DataSource.Factory<Int, CategoryEntity>() {
             override fun create(): DataSource<Int, CategoryEntity> {
-                return CategoriesDataSource(compositeDisposable)
+                return CategoriesDataSource(compositeDisposable, stateLd)
             }
         }
         return LivePagedListBuilder(dataSourceFactory, config)

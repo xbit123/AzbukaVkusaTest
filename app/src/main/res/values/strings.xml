@@ -2,4 +2,7 @@
     <string name="app_name">AzbukaVkusaTest</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="specifications_title">Specifications</string>
+    <string name="no_connection">No connection</string>
+    <string name="no_connection_desc">Please check your connection\nand try again</string>
+    <string name="retry">Retry</string>
 </resources>

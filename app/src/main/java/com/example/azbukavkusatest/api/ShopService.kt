@@ -19,7 +19,7 @@ private const val HEADER_VALUE = "123"
 interface ShopService {
 
     @GET("categories")
-    fun getCategories() : Call<ApiResponse<Map<Int, ArrayList<CategoryEntity>>>>
+    fun getCategories() : Single<ApiResponse<Map<Int, ArrayList<CategoryEntity>>>>
 
     @GET("products/category/{category_id}")
     fun getProductsByCategory(

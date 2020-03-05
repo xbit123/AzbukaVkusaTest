@@ -57,13 +57,14 @@
                 tools:context=".ui.activity.ProductActivity">
 
                 <TextView
-                    android:id="@+id/rv_specifications"
+                    android:id="@+id/tv_specifications"
                     style="@style/MySubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:text="@string/specifications_title"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_price" />
 
@@ -114,10 +115,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_specifications" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_specifications" />
 
                 <TextView
                     android:id="@+id/tv_description"

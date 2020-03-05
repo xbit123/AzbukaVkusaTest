@@ -33,17 +33,24 @@ data class ProductEntity(
 ) {
     val fullName
         get() = "$manufacturer $model"
+
+    //Converts html into string
     val formattedDescription: String
         get() = productDescriptions
             .find { it.languageId == Constants.LANGUAGE_ID }?.description
             .let { HtmlDecoder.decode(it) }
             .replace("[\n]+".toRegex(), "\n")
             .replace("\t".toRegex(), "")
+
+    //filters attributes that are in out language
     fun attributesInLanguage(): List<AttributesEntity>? {
-        return attributes["attributes"]?.flatMap { it.value.values }?.filter { it.languageId == Constants.LANGUAGE_ID }
+        return attributes["attributes"]
+            ?.flatMap { it.value.values }
+            ?.filter { it.languageId == Constants.LANGUAGE_ID }
     }
 }
 
+//For images data binding
 @BindingAdapter("productImage")
 fun loadImage(view: AppCompatImageView, url: String?) {
     Glide.with(view.context).load(url).error(R.drawable.no_image).into(view)
