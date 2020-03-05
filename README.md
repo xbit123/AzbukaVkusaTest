@@ -2,7 +2,7 @@
 
 ![Demo](https://github.com/xbit123/AzbukaVkusaTest/blob/master/azbuka_demo.gif)
 
-##Used libraries:
+## Used libraries:
 * RxJava, Android Architecture Components, Paging
 * Retrofit, OkHttp, Gson, Glide
 
